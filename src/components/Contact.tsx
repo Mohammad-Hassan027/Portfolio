@@ -1,34 +1,29 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { useForm, ValidationError } from '@formspree/react';
 
 export const Contact = () => {
+  const [state, handleSubmit] = useForm("mnjbdjrw");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    toast({
-      title: "Message sent!",
-      description: "Thanks for reaching out. I'll get back to you soon.",
-    });
-
-    setFormData({ name: "", email: "", message: "" });
-    setIsSubmitting(false);
-  };
+  useEffect(() => {
+    if (state.succeeded) {
+      toast({
+        title: "Message sent!",
+        description: "Thanks for reaching out. I'll get back to you soon.",
+      });
+      setFormData({ name: "", email: "", message: "" });
+    }
+  }, [state.succeeded, toast]);
 
   return (
     <section id="contact" className="section-padding">
@@ -70,6 +65,7 @@ export const Contact = () => {
                 </label>
                 <Input
                   id="name"
+                  name="name"
                   type="text"
                   required
                   value={formData.name}
@@ -78,6 +74,12 @@ export const Contact = () => {
                   }
                   className="bg-card border-border focus:border-primary focus:ring-primary/20"
                   placeholder="Your name"
+                />
+                <ValidationError
+                  prefix="Name"
+                  field="name"
+                  errors={state.errors}
+                  className="text-red-500 text-sm mt-1"
                 />
               </div>
               <div>
@@ -89,6 +91,7 @@ export const Contact = () => {
                 </label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   required
                   value={formData.email}
@@ -97,6 +100,12 @@ export const Contact = () => {
                   }
                   className="bg-card border-border focus:border-primary focus:ring-primary/20"
                   placeholder="you@example.com"
+                />
+                <ValidationError
+                  prefix="Email"
+                  field="email"
+                  errors={state.errors}
+                  className="text-red-500 text-sm mt-1"
                 />
               </div>
               <div>
@@ -108,6 +117,7 @@ export const Contact = () => {
                 </label>
                 <Textarea
                   id="message"
+                  name="message"
                   required
                   rows={5}
                   value={formData.message}
@@ -117,13 +127,19 @@ export const Contact = () => {
                   className="bg-card border-border focus:border-primary focus:ring-primary/20 resize-none"
                   placeholder="Tell me about your project..."
                 />
+                <ValidationError
+                  prefix="Message"
+                  field="message"
+                  errors={state.errors}
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={state.submitting}
                 className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary text-primary-foreground font-medium transition-all duration-300 hover:shadow-[0_0_30px_hsl(217_91%_60%_/_0.4)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {isSubmitting ? (
+                {state.submitting ? (
                   <>
                     <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                     Sending...
