@@ -1,22 +1,22 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
+import { About } from "@/components/About";
+import { StudentExperience } from "@/components/Experience";
 import { Projects } from "@/components/Projects";
 import { TechStack } from "@/components/TechStack";
-import { About } from "@/components/About";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import { StudentExperience } from "@/components/Experience";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground grain-overlay">
       <Navigation />
       <main>
         <Hero />
-        <Projects />
-        <TechStack />
         <About />
         <StudentExperience />
+        <Projects />
+        <TechStack />
         <Contact />
       </main>
       <Footer />

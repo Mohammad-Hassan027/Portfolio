@@ -104,13 +104,13 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
+      staggerChildren: 0.06,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
@@ -120,45 +120,65 @@ const itemVariants = {
 
 export const TechStack = () => {
   return (
-    <section id="tech" className="section-padding">
-      <div className="container-tight">
+    <section id="tech" className="section-padding relative overflow-hidden">
+      {/* Watermark */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 watermark-text text-[clamp(3rem,12vw,12rem)] whitespace-nowrap">
+        PARTNERSHIPS
+      </div>
+
+      <div className="container-tight relative z-10">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16 md:mb-24"
         >
-          <span className="text-xs uppercase tracking-widest text-primary font-medium">
-            Technology Stack
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">
-            Built with Modern Tech
+          <div className="flex items-center gap-4 mb-4">
+            <div className="section-divider" />
+            <span className="text-xs uppercase tracking-[0.3em] text-neon font-semibold">
+              Partnerships
+            </span>
+          </div>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground tracking-tight">
+            TECH ARSENAL
           </h2>
-          <p className="text-muted-foreground max-w-lg mx-auto">
-            Leveraging the MERN stack with TypeScript for type-safe, scalable applications.
+          <p className="text-muted-foreground mt-4 max-w-lg text-sm leading-relaxed">
+            Leveraging the MERN stack with TypeScript for type-safe, scalable
+            applications.
           </p>
         </motion.div>
 
+        {/* Tech grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"
         >
           {technologies.map((tech) => (
             <motion.div
               key={tech.name}
               variants={itemVariants}
-              className="group relative flex flex-col items-center justify-center p-6 rounded-xl border border-border bg-card/50 hover:bg-card hover:border-muted-foreground/30 transition-all duration-300 hover-lift"
+              className="group relative flex flex-col items-center justify-center p-6 sm:p-8 border border-white/5 bg-[#111111]/40 transition-all duration-500 hover:border-neon/30 hover:bg-[#111111]/80 cursor-default"
             >
-              <div className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+              {/* Hover glow */}
+              <div className="absolute inset-0 bg-neon/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              {/* Icon */}
+              <div className="relative text-white/20 group-hover:text-neon transition-colors duration-500">
                 {tech.icon}
               </div>
-              <span className="mt-3 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+
+              {/* Name */}
+              <span className="relative mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-white/30 group-hover:text-neon transition-colors duration-500 text-center">
                 {tech.name}
               </span>
+
+              {/* Bottom accent */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-neon group-hover:w-full transition-all duration-500" />
             </motion.div>
           ))}
         </motion.div>

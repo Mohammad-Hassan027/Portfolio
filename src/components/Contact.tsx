@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Send } from "lucide-react";
+import { Github, Linkedin, Send, Mail } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,41 +25,78 @@ export const Contact = () => {
     }
   }, [state.succeeded, toast]);
 
+  const socialLinks = [
+    {
+      name: "GITHUB",
+      href: "https://github.com/Mohammad-Hassan027",
+      icon: <Github className="w-5 h-5" />,
+    },
+    {
+      name: "LINKEDIN",
+      href: "https://www.linkedin.com/in/mohammad-hassan-shaikh",
+      icon: <Linkedin className="w-5 h-5" />,
+    },
+    {
+      name: "EMAIL",
+      href: "mailto:hassanshaikh@example.com",
+      icon: <Mail className="w-5 h-5" />,
+    },
+  ];
+
   return (
-    <section id="contact" className="section-padding">
-      <div className="container-tight">
+    <section id="contact" className="section-padding relative overflow-hidden">
+      {/* Watermark */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 watermark-text text-[clamp(3rem,12vw,12rem)] whitespace-nowrap">
+        FINAL LAP
+      </div>
+
+      <div className="container-tight relative z-10">
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16 md:mb-24"
         >
-          <span className="text-xs uppercase tracking-widest text-primary font-medium">
-            Get in Touch
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold mt-4 mb-4">
-            Let's Work Together
-          </h2>
-          <p className="text-muted-foreground max-w-lg mx-auto">
-            Have a project in mind? I'd love to hear about it. Send me a message
-            and let's create something great.
-          </p>
+          <div className="flex items-center gap-4 mb-4">
+            <div className="section-divider" />
+            <span className="text-xs uppercase tracking-[0.3em] text-neon font-semibold">
+              Final Lap
+            </span>
+          </div>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+        {/* Big bold headline */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8 }}
+          className="mb-16 md:mb-24"
+        >
+          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-foreground leading-[1.1] tracking-tight">
+            ALWAYS BRINGING
+            <br />
+            THE FIGHT<span className="text-neon">.</span>
+            <br />
+            <span className="text-neon">LET'S WORK.</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20">
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7 }}
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium mb-2 text-foreground"
+                  className="block text-[10px] uppercase tracking-[0.25em] font-semibold mb-3 text-muted-foreground"
                 >
                   Name
                 </label>
@@ -72,7 +109,7 @@ export const Contact = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="bg-card border-border focus:border-primary focus:ring-primary/20"
+                  className="bg-[#111111] border-white/10 rounded-none px-4 py-6 text-foreground placeholder:text-white/20 focus:border-neon focus:ring-neon/20 transition-colors"
                   placeholder="Your name"
                 />
                 <ValidationError
@@ -85,7 +122,7 @@ export const Contact = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium mb-2 text-foreground"
+                  className="block text-[10px] uppercase tracking-[0.25em] font-semibold mb-3 text-muted-foreground"
                 >
                   Email
                 </label>
@@ -98,7 +135,7 @@ export const Contact = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="bg-card border-border focus:border-primary focus:ring-primary/20"
+                  className="bg-[#111111] border-white/10 rounded-none px-4 py-6 text-foreground placeholder:text-white/20 focus:border-neon focus:ring-neon/20 transition-colors"
                   placeholder="you@example.com"
                 />
                 <ValidationError
@@ -111,7 +148,7 @@ export const Contact = () => {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium mb-2 text-foreground"
+                  className="block text-[10px] uppercase tracking-[0.25em] font-semibold mb-3 text-muted-foreground"
                 >
                   Message
                 </label>
@@ -124,7 +161,7 @@ export const Contact = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  className="bg-card border-border focus:border-primary focus:ring-primary/20 resize-none"
+                  className="bg-[#111111] border-white/10 rounded-none px-4 py-4 text-foreground placeholder:text-white/20 focus:border-neon focus:ring-neon/20 transition-colors resize-none"
                   placeholder="Tell me about your project..."
                 />
                 <ValidationError
@@ -137,11 +174,11 @@ export const Contact = () => {
               <button
                 type="submit"
                 disabled={state.submitting}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary text-primary-foreground font-medium transition-all duration-300 hover:shadow-[0_0_30px_hsl(217_91%_60%_/_0.4)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-neon text-black text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 hover:shadow-[0_0_40px_rgba(204,255,0,0.3)] hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {state.submitting ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                     Sending...
                   </>
                 ) : (
@@ -154,45 +191,68 @@ export const Contact = () => {
             </form>
           </motion.div>
 
-          {/* Contact Info */}
+          {/* Right side: Socials + Info */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col justify-center"
+            transition={{ duration: 0.7 }}
+            className="flex flex-col justify-between"
           >
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Connect with me</h3>
-                <div className="flex gap-4">
-                  <a
-                    href="https://github.com/Mohammad-Hassan027"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-center w-12 h-12 rounded-xl border border-border bg-card hover:bg-secondary hover:border-muted-foreground/30 transition-all duration-300 hover-lift"
-                    aria-label="GitHub"
+            {/* Social links */}
+            <div className="space-y-4">
+              <h3 className="text-[10px] uppercase tracking-[0.25em] font-semibold text-muted-foreground mb-6">
+                Connect
+              </h3>
+              {socialLinks.map((link, i) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="group flex items-center justify-between p-5 border border-white/5 bg-[#111111]/40 hover:border-neon/30 hover:bg-[#111111]/80 transition-all duration-500"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="text-white/30 group-hover:text-neon transition-colors duration-500">
+                      {link.icon}
+                    </div>
+                    <span className="font-display text-sm tracking-widest text-foreground group-hover:text-neon transition-colors duration-500">
+                      {link.name}
+                    </span>
+                  </div>
+                  <svg
+                    className="w-4 h-4 text-white/20 group-hover:text-neon group-hover:translate-x-1 transition-all duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <Github className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/in/mohammad-hassan-shaikh"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-center w-12 h-12 rounded-xl border border-border bg-card hover:bg-secondary hover:border-muted-foreground/30 transition-all duration-300 hover-lift"
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  </a>
-                </div>
-              </div>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </motion.a>
+              ))}
+            </div>
 
-              <div className="p-6 rounded-xl border border-border bg-card/50">
-                <p className="text-muted-foreground leading-relaxed">
-                  Currently open to freelance projects and full-time
-                  opportunities. If you have an exciting project or position,
-                  don't hesitate to reach out!
-                </p>
+            {/* Info card */}
+            <div className="mt-8 p-6 border border-white/5 bg-[#111111]/40">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Currently open to freelance projects and full-time
+                opportunities. If you have an exciting project or position,
+                don't hesitate to reach out!
+              </p>
+              <div className="flex items-center gap-2 mt-4">
+                <div className="w-2 h-2 rounded-full bg-neon animate-pulse" />
+                <span className="text-xs uppercase tracking-[0.15em] text-neon font-medium">
+                  Available now
+                </span>
               </div>
             </div>
           </motion.div>

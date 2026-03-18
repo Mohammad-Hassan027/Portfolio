@@ -1,117 +1,185 @@
-import { motion } from "framer-motion";
-import { ArrowDown, Download } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+
+const nameLines = ["MOHAMMAD", "HASSAN", "SHAIKH"];
+
+const letterVariants = {
+  hidden: { opacity: 0, y: 80 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.03 + 0.4,
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+};
 
 export const Hero = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background glow effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,hsl(217_91%_60%_/_0.15),transparent)]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl animate-pulse-glow" />
+    <section
+      ref={ref}
+      className="relative h-screen flex items-center justify-center overflow-hidden"
+    >
+      {/* Dark gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-transparent to-[#0a0a0a]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_50%,rgba(204,255,0,0.03),transparent)]" />
 
-      <div className="container-tight relative z-10 text-center">
+      {/* Subtle grid background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+          backgroundSize: "80px 80px",
+        }}
+      />
+
+      {/* Main content with parallax */}
+      <motion.div
+        style={{ y, opacity }}
+        className="relative z-10 w-full px-5 sm:px-8 lg:px-12"
+      >
+        {/* Status badge */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="space-y-6"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="flex items-center gap-3 mb-8 md:mb-12"
         >
-          {/* Status badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-card/50 text-sm text-muted-foreground"
-          >
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          <div className="w-2 h-2 rounded-full bg-neon animate-pulse" />
+          <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground font-medium">
             Available for new projects
-          </motion.div>
-
-          {/* Main heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight"
-          >
-            Full-Stack
-            <br />
-            <span className="text-gradient">Developer</span>
-          </motion.h1>
-
-          {/* Sub-headline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
-          >
-            Building scalable, high-performance web applications
-            <br className="hidden sm:block" />
-            with <span className="text-foreground font-medium">
-              TypeScript
-            </span>{" "}
-            and modern technologies.
-          </motion.p>
-
-          {/* CTA buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
-          >
-            <a
-              href="#work"
-              className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-medium transition-all duration-300 hover:shadow-[0_0_30px_hsl(217_91%_60%_/_0.4)] hover:-translate-y-0.5"
-            >
-              View My Work
-              <svg
-                className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg border border-border text-foreground font-medium transition-all duration-300 hover:bg-card hover:border-muted-foreground/30"
-            >
-              Get in Touch
-            </a>
-            <a
-              href="/resume.pdf"
-              download
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg border border-primary/50 text-primary font-medium transition-all duration-300 hover:bg-primary/10 hover:border-primary"
-            >
-              <Download className="w-4 h-4" />
-              Resume
-            </a>
-          </motion.div>
+          </span>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Massive name typography */}
+        <div className="space-y-0">
+          {nameLines.map((line, lineIndex) => (
+            <div key={line} className="overflow-hidden">
+              <motion.h1
+                className="font-display text-[clamp(2.5rem,10vw,9rem)] leading-[0.85] tracking-tight text-foreground"
+                aria-label={lineIndex === 0 ? "Mohammad Hassan Shaikh" : undefined}
+              >
+                {line.split("").map((char, charIndex) => (
+                  <motion.span
+                    key={`${lineIndex}-${charIndex}`}
+                    custom={lineIndex * line.length + charIndex}
+                    variants={letterVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="inline-block"
+                    style={
+                      lineIndex === 1
+                        ? { color: "var(--neon)" }
+                        : undefined
+                    }
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </motion.h1>
+            </div>
+          ))}
+        </div>
+
+        {/* Neon accent line */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="absolute -bottom-20 left-1/2 -translate-x-1/2"
+          initial={{ width: 0 }}
+          animate={{ width: "80px" }}
+          transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
+          className="h-[3px] bg-neon mt-8 md:mt-12"
+        />
+
+        {/* Subtitle */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4, duration: 0.6 }}
+          className="mt-6 md:mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8"
+        >
+          <p className="text-sm sm:text-base uppercase tracking-[0.3em] text-muted-foreground font-medium">
+            Full-Stack Developer
+          </p>
+          <span className="hidden sm:block w-px h-4 bg-white/20" />
+          <p className="text-sm text-muted-foreground max-w-md leading-relaxed normal-case tracking-normal">
+            Building scalable, high-performance web applications with{" "}
+            <span className="text-foreground">TypeScript</span> and modern
+            technologies.
+          </p>
+        </motion.div>
+
+        {/* CTA buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.6, duration: 0.6 }}
+          className="flex flex-wrap items-center gap-4 mt-10"
         >
           <a
             href="#work"
-            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            className="group inline-flex items-center gap-3 px-8 py-3.5 bg-neon text-black text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 hover:shadow-[0_0_40px_rgba(204,255,0,0.3)] hover:-translate-y-0.5"
           >
-            <span className="text-xs tracking-widest uppercase">Scroll</span>
-            <ArrowDown className="w-4 h-4 animate-bounce" />
+            View My Work
+            <svg
+              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </a>
+          <a
+            href="#contact"
+            className="inline-flex items-center px-8 py-3.5 text-xs uppercase tracking-[0.2em] font-bold border border-white/20 text-foreground hover:border-neon hover:text-neon transition-all duration-300"
+          >
+            Get in Touch
           </a>
         </motion.div>
-      </div>
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 0.6 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+      >
+        <a
+          href="#about"
+          className="flex flex-col items-center gap-3 text-muted-foreground hover:text-neon transition-colors duration-300 group"
+        >
+          <span className="text-[10px] uppercase tracking-[0.3em] font-medium">
+            Scroll to explore
+          </span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+            className="w-5 h-8 border border-white/20 rounded-full flex items-start justify-center p-1.5 group-hover:border-neon/50 transition-colors"
+          >
+            <div className="w-1 h-1.5 bg-white/60 rounded-full group-hover:bg-neon transition-colors" />
+          </motion.div>
+        </a>
+      </motion.div>
+
+      {/* Corner accents */}
+      <div className="absolute top-8 right-8 w-16 h-16 border-t border-r border-white/10 hidden lg:block" />
+      <div className="absolute bottom-8 left-8 w-16 h-16 border-b border-l border-white/10 hidden lg:block" />
     </section>
   );
 };
