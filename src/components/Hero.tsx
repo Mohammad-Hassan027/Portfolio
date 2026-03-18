@@ -3,15 +3,50 @@ import { useRef } from "react";
 
 const nameLines = ["MOHAMMAD", "HASSAN", "SHAIKH"];
 
-const letterVariants = {
-  hidden: { opacity: 0, y: 80 },
+// Clip-path reveal variant — each line sweeps in from bottom
+const lineRevealVariants = {
+  hidden: {
+    clipPath: "inset(100% 0 0 0)",
+    y: 40,
+  },
   visible: (i: number) => ({
-    opacity: 1,
+    clipPath: "inset(0% 0 0 0)",
     y: 0,
     transition: {
-      delay: i * 0.03 + 0.4,
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
+      delay: i * 0.15 + 0.3,
+      duration: 0.9,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  }),
+};
+
+// Subtitle word-by-word stagger
+const wordRevealVariants = {
+  hidden: { opacity: 0, y: "100%" },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: "0%",
+    transition: {
+      delay: i * 0.08 + 1.3,
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  }),
+};
+
+// CTA slide-in from bottom with clip
+const ctaRevealVariants = {
+  hidden: {
+    clipPath: "inset(100% 0 0 0)",
+    opacity: 0,
+  },
+  visible: (i: number) => ({
+    clipPath: "inset(0% 0 0 0)",
+    opacity: 1,
+    transition: {
+      delay: i * 0.12 + 1.6,
+      duration: 0.7,
+      ease: [0.16, 1, 0.3, 1] as const,
     },
   }),
 };
@@ -26,10 +61,16 @@ export const Hero = () => {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
+  const subtitleWords = "Full-Stack Developer".split(" ");
+  const descWords =
+    "Building scalable, high-performance web applications with TypeScript and modern technologies.".split(
+      " "
+    );
+
   return (
     <section
       ref={ref}
-      className="relative h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Dark gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-transparent to-[#0a0a0a]" />
@@ -47,14 +88,14 @@ export const Hero = () => {
       {/* Main content with parallax */}
       <motion.div
         style={{ y, opacity }}
-        className="relative z-10 w-full px-5 sm:px-8 lg:px-12"
+        className="relative z-10 w-full px-5 sm:px-8 lg:px-12 pt-20 sm:pt-0"
       >
         {/* Status badge */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="flex items-center gap-3 mb-8 md:mb-12"
+          className="flex items-center gap-3 mb-6 md:mb-8"
         >
           <div className="w-2 h-2 rounded-full bg-neon animate-pulse" />
           <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground font-medium">
@@ -62,31 +103,23 @@ export const Hero = () => {
           </span>
         </motion.div>
 
-        {/* Massive name typography */}
+        {/* Massive name typography — clip-path reveal per line */}
         <div className="space-y-0">
           {nameLines.map((line, lineIndex) => (
             <div key={line} className="overflow-hidden">
               <motion.h1
-                className="font-display text-[clamp(2.5rem,10vw,9rem)] leading-[0.85] tracking-tight text-foreground"
-                aria-label={lineIndex === 0 ? "Mohammad Hassan Shaikh" : undefined}
+                custom={lineIndex}
+                variants={lineRevealVariants}
+                initial="hidden"
+                animate="visible"
+                className={`font-display text-[clamp(2rem,9vw,9rem)] leading-[0.85] tracking-tight text-foreground ${
+                  lineIndex === 1 ? "text-shimmer" : ""
+                }`}
+                aria-label={
+                  lineIndex === 0 ? "Mohammad Hassan Shaikh" : undefined
+                }
               >
-                {line.split("").map((char, charIndex) => (
-                  <motion.span
-                    key={`${lineIndex}-${charIndex}`}
-                    custom={lineIndex * line.length + charIndex}
-                    variants={letterVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="inline-block"
-                    style={
-                      lineIndex === 1
-                        ? { color: "var(--neon)" }
-                        : undefined
-                    }
-                  >
-                    {char}
-                  </motion.span>
-                ))}
+                {line}
               </motion.h1>
             </div>
           ))}
@@ -96,38 +129,56 @@ export const Hero = () => {
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: "80px" }}
-          transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
-          className="h-[3px] bg-neon mt-8 md:mt-12"
+          transition={{ delay: 1.0, duration: 0.8, ease: "easeOut" }}
+          className="h-[3px] bg-neon mt-6 md:mt-10"
         />
 
-        {/* Subtitle */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
-          className="mt-6 md:mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8"
-        >
-          <p className="text-sm sm:text-base uppercase tracking-[0.3em] text-muted-foreground font-medium">
-            Full-Stack Developer
-          </p>
+        {/* Subtitle — word-by-word stagger reveal */}
+        <div className="mt-5 md:mt-7 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-8">
+          <div className="flex flex-wrap gap-x-2 overflow-hidden">
+            {subtitleWords.map((word, i) => (
+              <motion.span
+                key={i}
+                custom={i}
+                variants={wordRevealVariants}
+                initial="hidden"
+                animate="visible"
+                className="text-sm sm:text-base uppercase tracking-[0.3em] text-muted-foreground font-medium inline-block"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </div>
           <span className="hidden sm:block w-px h-4 bg-white/20" />
-          <p className="text-sm text-muted-foreground max-w-md leading-relaxed normal-case tracking-normal">
-            Building scalable, high-performance web applications with{" "}
-            <span className="text-foreground">TypeScript</span> and modern
-            technologies.
-          </p>
-        </motion.div>
+          <div className="flex flex-wrap gap-x-1.5 overflow-hidden">
+            {descWords.map((word, i) => (
+              <motion.span
+                key={i}
+                custom={i + subtitleWords.length}
+                variants={wordRevealVariants}
+                initial="hidden"
+                animate="visible"
+                className="text-sm text-muted-foreground leading-relaxed normal-case tracking-normal inline-block"
+              >
+                {word === "TypeScript" ? (
+                  <span className="text-foreground">{word}</span>
+                ) : (
+                  word
+                )}
+              </motion.span>
+            ))}
+          </div>
+        </div>
 
-        {/* CTA buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6, duration: 0.6 }}
-          className="flex flex-wrap items-center gap-4 mt-10"
-        >
-          <a
+        {/* CTA buttons — clip reveal from bottom */}
+        <div className="flex flex-wrap items-center gap-4 mt-8">
+          <motion.a
             href="#work"
-            className="group inline-flex items-center gap-3 px-8 py-3.5 bg-neon text-black text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 hover:shadow-[0_0_40px_rgba(204,255,0,0.3)] hover:-translate-y-0.5"
+            custom={0}
+            variants={ctaRevealVariants}
+            initial="hidden"
+            animate="visible"
+            className="group inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 bg-neon text-black text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 hover:shadow-[0_0_40px_rgba(204,255,0,0.3)] hover:-translate-y-0.5"
           >
             View My Work
             <svg
@@ -143,14 +194,18 @@ export const Hero = () => {
                 d="M17 8l4 4m0 0l-4 4m4-4H3"
               />
             </svg>
-          </a>
-          <a
+          </motion.a>
+          <motion.a
             href="#contact"
-            className="inline-flex items-center px-8 py-3.5 text-xs uppercase tracking-[0.2em] font-bold border border-white/20 text-foreground hover:border-neon hover:text-neon transition-all duration-300"
+            custom={1}
+            variants={ctaRevealVariants}
+            initial="hidden"
+            animate="visible"
+            className="inline-flex items-center px-6 sm:px-8 py-3.5 text-xs uppercase tracking-[0.2em] font-bold border border-white/20 text-foreground hover:border-neon hover:text-neon transition-all duration-300"
           >
             Get in Touch
-          </a>
-        </motion.div>
+          </motion.a>
+        </div>
       </motion.div>
 
       {/* Scroll indicator */}
@@ -158,7 +213,7 @@ export const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-10"
       >
         <a
           href="#about"

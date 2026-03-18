@@ -92,13 +92,13 @@ export const StudentExperience = () => {
                   </p>
 
                   {/* Stats grid */}
-                  <div className="grid grid-cols-3 gap-4 mb-8">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-8">
                     {item.stats.map((stat, i) => (
                       <div
                         key={i}
                         className="border border-white/5 bg-white/[0.02] p-4 text-center group-hover:border-neon/10 transition-colors duration-500"
                       >
-                        <div className="font-display text-lg sm:text-xl text-foreground mb-1">
+                        <div className="font-display text-base sm:text-lg md:text-xl text-foreground mb-1 truncate">
                           {stat.value}
                         </div>
                         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">

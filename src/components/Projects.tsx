@@ -81,8 +81,16 @@ export const Projects = () => {
                 {/* Hover gradient */}
                 <div className="absolute inset-0 bg-gradient-to-br from-neon/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                <div className="relative p-6 sm:p-8 md:p-10">
-                  <div className="flex flex-col lg:flex-row lg:items-start gap-8">
+                <div className="relative p-5 sm:p-8 md:p-10">
+                  {/* Featured badge — inline on mobile, absolute on sm+ */}
+                  {project.featured && (
+                    <div className="sm:absolute sm:top-8 sm:right-8 mb-4 sm:mb-0">
+                      <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-neon/60 border border-neon/20 px-3 py-1">
+                        Featured
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex flex-col lg:flex-row lg:items-start gap-6 sm:gap-8">
                     {/* Left: Number + Title */}
                     <div className="lg:w-1/3">
                       <span className="font-display text-5xl sm:text-6xl md:text-7xl text-neon/10 group-hover:text-neon/25 transition-colors duration-500 leading-none block mb-4">
@@ -120,7 +128,7 @@ export const Projects = () => {
 
                     {/* Right: Description + Tags */}
                     <div className="lg:w-2/3">
-                      <p className="text-muted-foreground leading-[1.8] text-[15px] mb-8">
+                      <p className="text-muted-foreground leading-[1.8] text-sm sm:text-[15px] mb-8 mt-3 md:mt-5 break-words">
                         {project.description}
                       </p>
 
@@ -142,14 +150,7 @@ export const Projects = () => {
                 {/* Bottom neon border on hover */}
                 <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                {/* Featured badge */}
-                {project.featured && (
-                  <div className="absolute top-6 right-6 sm:top-8 sm:right-8">
-                    <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-neon/60 border border-neon/20 px-3 py-1">
-                      Featured
-                    </span>
-                  </div>
-                )}
+                {/* Featured badge is now rendered inline on mobile — see above */}
               </div>
             </motion.article>
           ))}
