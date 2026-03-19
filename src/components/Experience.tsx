@@ -2,6 +2,20 @@ import { motion } from "framer-motion";
 
 const academicPath = [
   {
+    role: "HSC",
+    institution: "K.M.E.S High School",
+    period: "2023 - 2024",
+    year: "2023",
+    description:
+      "Completed HSC with a strong foundation in Physics, Chemistry, Biology and Mathematics.",
+    stats: [
+      { label: "Percentage", value: "73%" },
+      { label: "Focus", value: "PCMB" },
+      { label: "Status", value: "Completed" },
+    ],
+    skills: ["Physics", "Chemistry", "Biology", "Mathematics"],
+  },
+  {
     role: "B.E. Electronics and TeleCommunication",
     institution: "Thakur College of Engineering and Technology",
     period: "2024 — PRESENT",

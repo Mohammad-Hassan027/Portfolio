@@ -88,7 +88,7 @@ export const Hero = () => {
       {/* Main content with parallax */}
       <motion.div
         style={{ y, opacity }}
-        className="relative z-10 w-full px-5 sm:px-8 lg:px-12 pt-20 sm:pt-0"
+        className="relative z-10 w-full px-5 sm:px-8 lg:px-12 pt-16 sm:pt-0"
       >
         {/* Status badge */}
         <motion.div
@@ -112,9 +112,8 @@ export const Hero = () => {
                 variants={lineRevealVariants}
                 initial="hidden"
                 animate="visible"
-                className={`font-display text-[clamp(2rem,9vw,9rem)] leading-[0.85] tracking-tight text-foreground ${
-                  lineIndex === 1 ? "text-shimmer" : ""
-                }`}
+                className={`font-display text-[clamp(2rem,9vw,9rem)] leading-[0.85] tracking-tight text-foreground ${lineIndex === 1 ? "text-shimmer" : ""
+                  }`}
                 aria-label={
                   lineIndex === 0 ? "Mohammad Hassan Shaikh" : undefined
                 }
@@ -178,21 +177,13 @@ export const Hero = () => {
             variants={ctaRevealVariants}
             initial="hidden"
             animate="visible"
-            className="group inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 bg-neon text-black text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 hover:shadow-[0_0_40px_rgba(204,255,0,0.3)] hover:-translate-y-0.5"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="group inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 bg-neon text-black text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300 hover:shadow-[0_0_30px_rgba(204,255,0,0.4)]"
           >
-            View My Work
-            <svg
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
+            Explore My Work
+            <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </motion.a>
           <motion.a
@@ -201,9 +192,11 @@ export const Hero = () => {
             variants={ctaRevealVariants}
             initial="hidden"
             animate="visible"
-            className="inline-flex items-center px-6 sm:px-8 py-3.5 text-xs uppercase tracking-[0.2em] font-bold border border-white/20 text-foreground hover:border-neon hover:text-neon transition-all duration-300"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center px-6 sm:px-8 py-3.5 text-xs uppercase tracking-[0.2em] font-bold border border-white/20 text-foreground hover:border-neon hover:text-neon transition-all duration-300 shadow-[0_0_0_rgba(204,255,0,0)] hover:shadow-[inset_0_0_20px_rgba(204,255,0,0.1)]"
           >
-            Get in Touch
+            Let's Build Together
           </motion.a>
         </div>
       </motion.div>
@@ -213,7 +206,7 @@ export const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.6 }}
-        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-3 sm:bottom-8 left-1/2 -translate-x-1/2 z-10"
       >
         <a
           href="#about"

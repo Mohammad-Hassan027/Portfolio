@@ -32,6 +32,26 @@ const projects = [
     featured: true,
     number: "02",
   },
+  {
+    title: "RastaSetu",
+    subtitle: "Social Travel & Rewards App",
+    description: "A full-stack mobile application designed to connect travelers and gamify the journey. It features a social feed for sharing travel posts, robust user profiles, trip tracking, and an integrated rewards system to incentivize exploration.",
+    tags: ["React Native", "Expo", "Node.js", "Firebase", "Cloudinary"],
+    demo: "",
+    code: "https://github.com/Mohammad-Hassan027/rastasetu-expo",
+    featured: true,
+    number: "03",
+  },
+  {
+    title: "Book Store",
+    subtitle: "E-Commerce Platform",
+    description: "A full-stack e-commerce application tailored for book enthusiasts. It features secure user authentication, an intuitive shopping cart and checkout flow, plus a dedicated admin dashboard for complete inventory and order management.",
+    tags: ["React", "Node.js", "MongoDB", "Express", "Firebase"],
+    demo: "https://book-store-app-mu-nine.vercel.app/",
+    code: "https://github.com/Mohammad-Hassan027/Book-store-app",
+    featured: true,
+    number: "04",
+  }
 ];
 
 export const Projects = () => {
@@ -128,7 +148,7 @@ export const Projects = () => {
 
                     {/* Right: Description + Tags */}
                     <div className="lg:w-2/3">
-                      <p className="text-muted-foreground leading-[1.8] text-sm sm:text-[15px] mb-8 mt-3 md:mt-5 break-words">
+                      <p className="text-muted-foreground leading-[1.8] text-sm sm:text-[15px] mb-8 mt-3 md:mt-6 break-words">
                         {project.description}
                       </p>
 
