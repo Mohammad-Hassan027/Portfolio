@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes"; // Added
+import { Sun, Moon } from "lucide-react"; // Added
 
 const navLinks = [
   { href: "#about", label: "About" },
@@ -12,6 +14,7 @@ const navLinks = [
 export const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme(); // Hook to control theme
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,11 +40,10 @@ export const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5 py-3"
-            : "bg-transparent py-5"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+          ? "bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5 py-3"
+          : "bg-transparent py-5"
+          }`}
       >
         <nav className="container-tight flex items-center justify-between">
           {/* Brand */}
@@ -73,14 +75,23 @@ export const Navigation = () => {
             ))}
           </ul>
 
-          {/* Resume CTA */}
-          <a
-            href="/resume.pdf"
-            download
-            className="hidden md:inline-flex items-center gap-2 px-5 py-2 text-xs uppercase tracking-[0.15em] font-semibold border border-neon/30 text-neon hover:bg-neon hover:text-black transition-all duration-300 rounded-sm"
-          >
-            Resume
-          </a>
+          {/* Right side actions (Theme Toggle + Resume) */}
+          <div className="hidden md:flex items-center gap-5">
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="flex items-center justify-center w-9 h-9 border border-white/10 rounded-sm text-muted-foreground hover:border-neon hover:text-neon transition-all"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <a
+              href="/resume.pdf"
+              download
+              className="inline-flex items-center gap-2 px-5 py-2 text-xs uppercase tracking-[0.15em] font-semibold border border-neon/30 text-neon hover:bg-neon hover:text-black transition-all duration-300 rounded-sm"
+            >
+              Resume
+            </a>
+          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -129,17 +140,31 @@ export const Navigation = () => {
                   {link.label}
                 </motion.a>
               ))}
-              <motion.a
-                href="/resume.pdf"
-                download
+
+              {/* Mobile Menu Actions */}
+              <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: 0.3, duration: 0.4 }}
-                className="mt-4 px-8 py-3 text-sm uppercase tracking-[0.15em] font-semibold border border-neon text-neon hover:bg-neon hover:text-black transition-all duration-300"
+                className="flex flex-col items-center gap-6 mt-4"
               >
-                Resume
-              </motion.a>
+                <button
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="flex items-center gap-3 text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-neon transition-colors"
+                >
+                  {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+                  Toggle Theme
+                </button>
+
+                <a
+                  href="/resume.pdf"
+                  download
+                  className="px-8 py-3 text-sm uppercase tracking-[0.15em] font-semibold border border-neon text-neon hover:bg-neon hover:text-black transition-all duration-300"
+                >
+                  Resume
+                </a>
+              </motion.div>
             </nav>
           </motion.div>
         )}

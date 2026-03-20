@@ -115,41 +115,62 @@ const technologies = [
   }
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.06,
-    },
-  },
-};
+// Split the array in half to create two distinct scrolling rows
+const topRow = technologies.slice(0, Math.ceil(technologies.length / 2));
+const bottomRow = technologies.slice(Math.ceil(technologies.length / 2));
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const },
-  },
-};
+// Duplicate the arrays so the marquee loop is seamless
+const duplicatedTopRow = [...topRow, ...topRow];
+const duplicatedBottomRow = [...bottomRow, ...bottomRow];
+
+const TechCard = ({ tech }: { tech: any }) => (
+  <div className="group relative flex items-center gap-4 p-6 w-[280px] flex-shrink-0 rounded-2xl border border-white/5 bg-[#111111]/40 transition-all duration-500 hover:border-neon/30 hover:bg-[#111111]/80 cursor-default">
+    {/* Hover glow */}
+    <div className="absolute inset-0 bg-neon/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+
+    {/* Icon */}
+    <div className="relative text-white/20 group-hover:text-neon transition-colors duration-500 flex-shrink-0">
+      {tech.icon}
+    </div>
+
+    {/* Text Layout (Horizontal) */}
+    <div className="flex flex-col relative z-10">
+      <span className="text-sm font-bold uppercase tracking-wider text-white/80 group-hover:text-white transition-colors duration-500">
+        {tech.name}
+      </span>
+      <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30 group-hover:text-neon/70 transition-colors duration-500 mt-0.5">
+        Technology
+      </span>
+    </div>
+  </div>
+);
 
 export const TechStack = () => {
   return (
-    <section id="tech" className="section-padding relative overflow-hidden">
+    <section id="tech" className="section-padding relative overflow-hidden bg-background">
+      <style>{`
+        @keyframes scroll-left {
+          to { transform: translateX(-50%); }
+        }
+        @keyframes scroll-right {
+          from { transform: translateX(-50%); }
+          to { transform: translateX(0%); }
+        }
+      `}</style>
+
       {/* Watermark */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 watermark-text text-[clamp(3rem,12vw,12rem)] whitespace-nowrap">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 watermark-text text-[clamp(3rem,12vw,12rem)] whitespace-nowrap opacity-50">
         PARTNERSHIPS
       </div>
 
-      <div className="container-tight relative z-10">
+      <div className="relative z-10 w-full max-w-[100vw]">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="mb-16 md:mb-24"
+          className="container-tight mb-16 md:mb-24"
         >
           <div className="flex items-center gap-4 mb-4">
             <div className="section-divider" />
@@ -166,38 +187,34 @@ export const TechStack = () => {
           </p>
         </motion.div>
 
-        {/* Tech grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"
-        >
-          {technologies.map((tech) => (
-            <motion.div
-              key={tech.name}
-              variants={itemVariants}
-              className="group relative flex flex-col items-center justify-center p-6 sm:p-8 border border-white/5 bg-[#111111]/40 transition-all duration-500 hover:border-neon/30 hover:bg-[#111111]/80 cursor-default"
-            >
-              {/* Hover glow */}
-              <div className="absolute inset-0 bg-neon/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Infinite Marquee Container */}
+        <div className="relative flex flex-col gap-6 overflow-hidden py-4">
 
-              {/* Icon */}
-              <div className="relative text-white/20 group-hover:text-neon transition-colors duration-500">
-                {tech.icon}
-              </div>
+          {/* Edge Gradients */}
+          <div className="absolute top-0 bottom-0 left-0 w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-20 pointer-events-none" />
+          <div className="absolute top-0 bottom-0 right-0 w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
 
-              {/* Name */}
-              <span className="relative mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-white/30 group-hover:text-neon transition-colors duration-500 text-center">
-                {tech.name}
-              </span>
+          {/* Top Row - Scrolls Left */}
+          <div
+            className="flex gap-6 w-max hover:[animation-play-state:paused]"
+            style={{ animation: 'scroll-left 25s linear infinite' }}
+          >
+            {duplicatedTopRow.map((tech, idx) => (
+              <TechCard key={`top-${tech.name}-${idx}`} tech={tech} />
+            ))}
+          </div>
 
-              {/* Bottom accent */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px bg-neon group-hover:w-full transition-all duration-500" />
-            </motion.div>
-          ))}
-        </motion.div>
+          {/* Bottom Row - Scrolls Right */}
+          <div
+            className="flex gap-6 w-max hover:[animation-play-state:paused]"
+            style={{ animation: 'scroll-right 25s linear infinite' }}
+          >
+            {duplicatedBottomRow.map((tech, idx) => (
+              <TechCard key={`bottom-${tech.name}-${idx}`} tech={tech} />
+            ))}
+          </div>
+
+        </div>
       </div>
     </section>
   );

@@ -140,8 +140,8 @@ export const About = () => {
               className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/5"
             >
               {[
-                { value: "2+", label: "Projects Shipped" },
-                { value: "12+", label: "Technologies" },
+                { value: "5+", label: "Projects Shipped" },
+                { value: "14+", label: "Technologies" },
                 { value: "8.12", label: "CGPA" },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
@@ -153,6 +153,33 @@ export const About = () => {
                   </div>
                 </div>
               ))}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="mt-16 pt-8 border-t border-white/5"
+            >
+              <h4 className="font-display text-sm tracking-widest text-foreground mb-6">WHAT I USE</h4>
+              <div className="grid grid-cols-2 gap-y-6">
+                <div>
+                  <p className="text-neon text-xs tracking-widest uppercase mb-2">Coding</p>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>VS Code (One Dark Pro)</li>
+                    <li>Warp Terminal</li>
+                    <li>JetBrains Mono Font</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-neon text-xs tracking-widest uppercase mb-2">Hardware</p>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>MacBook Pro M-Series</li>
+                    <li>Keychron K2 V2</li>
+                    <li>MX Master 3S</li>
+                  </ul>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
