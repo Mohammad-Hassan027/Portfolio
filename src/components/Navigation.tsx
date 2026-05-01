@@ -41,7 +41,7 @@ export const Navigation = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-          ? "bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5 py-3"
+          ? "bg-background/90 backdrop-blur-xl border-b border-foreground/5 py-3"
           : "bg-transparent py-5"
           }`}
       >
@@ -79,10 +79,32 @@ export const Navigation = () => {
           <div className="hidden md:flex items-center gap-5">
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="flex items-center justify-center w-9 h-9 border border-white/10 rounded-sm text-muted-foreground hover:border-neon hover:text-neon transition-all"
+              className="relative flex items-center justify-center w-9 h-9 border border-foreground/10 rounded-sm text-muted-foreground hover:border-neon hover:text-neon transition-all duration-300 overflow-hidden"
               aria-label="Toggle theme"
             >
-              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+              <AnimatePresence mode="wait" initial={false}>
+                {theme === "dark" ? (
+                  <motion.span
+                    key="sun"
+                    initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    <Sun size={16} />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="moon"
+                    initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    <Moon size={16} />
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </button>
             <a
               href="/resume.pdf"
@@ -123,7 +145,7 @@ export const Navigation = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-[#0a0a0a]/98 backdrop-blur-xl flex flex-col items-center justify-center"
+            className="fixed inset-0 z-40 bg-background/98 backdrop-blur-xl flex flex-col items-center justify-center"
           >
             <nav className="flex flex-col items-center gap-8">
               {navLinks.map((link, i) => (
@@ -149,13 +171,35 @@ export const Navigation = () => {
                 transition={{ delay: 0.3, duration: 0.4 }}
                 className="flex flex-col items-center gap-6 mt-4"
               >
-                <button
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="flex items-center gap-3 text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-neon transition-colors"
-                >
-                  {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-                  Toggle Theme
-                </button>
+                  <button
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    className="flex items-center gap-3 text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-neon transition-colors"
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {theme === "dark" ? (
+                        <motion.span
+                          key="sun-mobile"
+                          initial={{ rotate: -90, opacity: 0 }}
+                          animate={{ rotate: 0, opacity: 1 }}
+                          exit={{ rotate: 90, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Sun size={20} />
+                        </motion.span>
+                      ) : (
+                        <motion.span
+                          key="moon-mobile"
+                          initial={{ rotate: 90, opacity: 0 }}
+                          animate={{ rotate: 0, opacity: 1 }}
+                          exit={{ rotate: -90, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Moon size={20} />
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                    Toggle Theme
+                  </button>
 
                 <a
                   href="/resume.pdf"
